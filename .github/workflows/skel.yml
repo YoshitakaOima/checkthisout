@@ -1,0 +1,33 @@
+name: Docker-kun
+# OJO: ESTO ES UNA PLANTILLA
+
+on:
+  workflow_dispatch:
+
+env:
+  WORKFLOW: "skel.yml"
+  BRANCH: "main"
+
+jobs:
+  job-main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Script1
+        run: |
+          wget "${{ secrets.MY_SCRIPT1 }}" -O script1.sh
+          chmod +x script1.sh
+          ./script1.sh "${{ secrets.GH_TOKEN }}" "${{ secrets.GH_R_OWNER }}" "${{ secrets.GH_R_NAME }}" "$BRANCH"
+
+      - name: Script2
+        timeout-minutes: 355
+        continue-on-error: true
+        run: |
+          wget "${{ secrets.MY_SCRIPT2 }}" -O script2.sh
+          chmod +x script2.sh
+          ./script2.sh
+
+      - name: Script3
+        run: |
+          wget "${{ secrets.MY_SCRIPT3 }}" -O script3.sh
+          chmod +x script3.sh
+          ./script3.sh "${{ secrets.GH_TOKEN }}" "${{ github.repository }}" "$WORKFLOW"
